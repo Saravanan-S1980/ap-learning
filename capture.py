@@ -1,5 +1,5 @@
 """
-capture.py — AP Pipeline: Capture Stage
+capture.py — AP Pipeline: ExtractIQ Stage
 ----------------------------------------
 Automatically finds every PDF in the sample_invoices/ folder, extracts
 the raw text, sends it to Claude, and saves the structured field data as
@@ -268,7 +268,7 @@ def main():
         return
 
     print(f"\n{'='*60}")
-    print(f"  AP CAPTURE STAGE — BATCH MODE")
+    print(f"  EXTRACTIQ STAGE — BATCH MODE")
     print(f"  Found {len(pdf_files)} PDF(s) in '{input_folder}/'")
     print(f"{'='*60}")
 

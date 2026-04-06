@@ -621,8 +621,8 @@ def _ap_stage4(inv: dict, s2_text: str, s3_text: str) -> dict:
     user = (
         f"Invoice: {inv.get('invoice_number')} | "
         f"Vendor: {inv.get('vendor_name')} | Amount: {amt_str}\n\n"
-        f"--- AP ADVANCE ---\n{s2_text}\n\n"
-        f"--- TRACE ---\n{s3_text}"
+        f"--- PROCESSORIQ ---\n{s2_text}\n\n"
+        f"--- AUDITIQ ---\n{s3_text}"
     )
     client = anthropic.Anthropic()
     with client.messages.stream(
@@ -1268,22 +1268,22 @@ def page_invoice_processing():
         for _k in ("ip_s2_log", "ip_s2_text", "ip_s3_log", "ip_s3_text", "ip_s4"):
             st.session_state[_k] = None
 
-        with st.status("AP Advance — running 3-way match…",
+        with st.status("ProcessorIQ — running 3-way match…",
                        expanded=True) as _s2_status:
             s2_text, s2_log = _ap_stage2(inv, _s2_status)
             st.session_state.ip_s2_text = s2_text
             st.session_state.ip_s2_log  = s2_log
-            _s2_status.update(label="AP Advance ✓", state="complete",
+            _s2_status.update(label="ProcessorIQ ✓", state="complete",
                               expanded=False)
 
-        with st.status("Trace — running fraud checks…",
+        with st.status("AuditIQ — running fraud checks…",
                        expanded=True) as _s3_status:
             s3_text, s3_log = _ap_stage3(inv, _s3_status)
             st.session_state.ip_s3_text = s3_text
             st.session_state.ip_s3_log  = s3_log
-            _s3_status.update(label="Trace ✓", state="complete", expanded=False)
+            _s3_status.update(label="AuditIQ ✓", state="complete", expanded=False)
 
-        with st.spinner("Assist — generating final decision…"):
+        with st.spinner("HelpDeskIQ — generating final decision…"):
             st.session_state.ip_s4 = _ap_stage4(
                 inv,
                 st.session_state.ip_s2_text,
@@ -2361,10 +2361,10 @@ def page_ap_pipeline():
 
     # ── Pipeline stepper ──────────────────────────────────────────────────────
     _stages = [
-        ("CAPTURE",    inv                             is not None),
-        ("AP ADVANCE", st.session_state.pp_s2_log     is not None),
-        ("TRACE",      st.session_state.pp_s3_log     is not None),
-        ("ASSIST",     st.session_state.pp_s4         is not None),
+        ("EXTRACTIQ",   inv                             is not None),
+        ("PROCESSORIQ", st.session_state.pp_s2_log     is not None),
+        ("AUDITIQ",     st.session_state.pp_s3_log     is not None),
+        ("HELPDESKIQ",  st.session_state.pp_s4         is not None),
     ]
     step_html = ""
     for i, (label, done) in enumerate(_stages):
@@ -2415,21 +2415,21 @@ def page_ap_pipeline():
         for _k in ("pp_s2_log", "pp_s2_text", "pp_s3_log", "pp_s3_text", "pp_s4"):
             st.session_state[_k] = None
 
-        with st.status("AP Advance — running 3-way match…",
+        with st.status("ProcessorIQ — running 3-way match…",
                        expanded=True) as _s2_st:
             s2_text, s2_log = _ap_stage2(inv, _s2_st)
             st.session_state.pp_s2_text = s2_text
             st.session_state.pp_s2_log  = s2_log
-            _s2_st.update(label="AP Advance ✓", state="complete", expanded=False)
+            _s2_st.update(label="ProcessorIQ ✓", state="complete", expanded=False)
 
-        with st.status("Trace — running fraud checks…",
+        with st.status("AuditIQ — running fraud checks…",
                        expanded=True) as _s3_st:
             s3_text, s3_log = _ap_stage3(inv, _s3_st)
             st.session_state.pp_s3_text = s3_text
             st.session_state.pp_s3_log  = s3_log
-            _s3_st.update(label="Trace ✓", state="complete", expanded=False)
+            _s3_st.update(label="AuditIQ ✓", state="complete", expanded=False)
 
-        with st.spinner("Assist — generating final decision…"):
+        with st.spinner("HelpDeskIQ — generating final decision…"):
             st.session_state.pp_s4 = _ap_stage4(
                 inv,
                 st.session_state.pp_s2_text,
@@ -2507,7 +2507,7 @@ def page_ap_pipeline():
             f"<tbody>{rows}</tbody></table>"
         )
 
-    # ── Stage 1 — CAPTURE ─────────────────────────────────────────────────────
+    # ── Stage 1 — EXTRACTIQ ─────────────────────────────────────────────────────
     def _fmt_a(val):
         try:    return _indian_fmt(float(val))
         except: return str(val) if val not in (None, "") else "—"
@@ -2555,11 +2555,11 @@ def page_ap_pipeline():
         + "</div>"
     )
     st.markdown(
-        _card_wrap("Stage 1 — Capture", "&#10003; Complete", "#00C48C", cap_inner),
+        _card_wrap("Stage 1 — ExtractIQ", "&#10003; Complete", "#00C48C", cap_inner),
         unsafe_allow_html=True,
     )
 
-    # ── Stage 2 — AP ADVANCE ──────────────────────────────────────────────────
+    # ── Stage 2 — PROCESSORIQ ──────────────────────────────────────────────────
     if st.session_state.pp_s2_log is not None:
         s2_checks = _parse_s2_checks(st.session_state.pp_s2_log)
         pass_count = sum(1 for _, l, _ in s2_checks if l == "pass")
@@ -2571,24 +2571,24 @@ def page_ap_pipeline():
         else:
             match_txt, match_col = "No Match",      "#FF5C5C"
         st.markdown(
-            _card_wrap("Stage 2 — AP Advance", match_txt, match_col,
+            _card_wrap("Stage 2 — ProcessorIQ", match_txt, match_col,
                        _checks_table(s2_checks)),
             unsafe_allow_html=True,
         )
 
-    # ── Stage 3 — TRACE ───────────────────────────────────────────────────────
+    # ── Stage 3 — AUDITIQ ───────────────────────────────────────────────────────
     if st.session_state.pp_s3_log is not None:
         s3_checks   = _parse_s3_checks(st.session_state.pp_s3_log)
         s3_all_pass = all(l == "pass" for _, l, _ in s3_checks)
         s3_txt      = "Clear"   if s3_all_pass else "Flagged"
         s3_col      = "#00C48C" if s3_all_pass else "#FF5C5C"
         st.markdown(
-            _card_wrap("Stage 3 — Trace", s3_txt, s3_col,
+            _card_wrap("Stage 3 — AuditIQ", s3_txt, s3_col,
                        _checks_table(s3_checks)),
             unsafe_allow_html=True,
         )
 
-    # ── Stage 4 — ASSIST ──────────────────────────────────────────────────────
+    # ── Stage 4 — HELPDESKIQ ──────────────────────────────────────────────────
     if st.session_state.pp_s4 is not None:
         s4 = st.session_state.pp_s4
         d  = s4["decision"].lower()
@@ -2630,7 +2630,7 @@ def page_ap_pipeline():
             f"</div>"
         )
         st.markdown(
-            _card_wrap("Stage 4 — Assist", "", "", decision_banner),
+            _card_wrap("Stage 4 — HelpDeskIQ", "", "", decision_banner),
             unsafe_allow_html=True,
         )
         with st.expander("Full AI reasoning"):
@@ -2666,15 +2666,15 @@ def page_ap_pipeline():
                     ],
                 }).to_excel(writer, sheet_name="Invoice Fields", index=False)
 
-                # Sheet 2 — AP Advance checks
+                # Sheet 2 — ProcessorIQ checks
                 s2r = _parse_s2_checks(st.session_state.pp_s2_log or [])
                 pd.DataFrame(s2r, columns=["Check", "Result", "Detail"]).to_excel(
-                    writer, sheet_name="AP Advance", index=False)
+                    writer, sheet_name="ProcessorIQ", index=False)
 
-                # Sheet 3 — Trace checks
+                # Sheet 3 — AuditIQ checks
                 s3r = _parse_s3_checks(st.session_state.pp_s3_log or [])
                 pd.DataFrame(s3r, columns=["Check", "Result", "Detail"]).to_excel(
-                    writer, sheet_name="Trace", index=False)
+                    writer, sheet_name="AuditIQ", index=False)
 
                 # Sheet 4 — Final Decision
                 pd.DataFrame({

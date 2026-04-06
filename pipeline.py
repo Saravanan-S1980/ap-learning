@@ -4,10 +4,10 @@ pipeline.py — Full AP (Accounts Payable) Processing Pipeline
 Reads every extracted JSON file from extracted_data/ and runs each
 invoice through 4 clearly separated stages:
 
-  Stage 1  CAPTURE     — Display key fields from the extracted JSON.
-  Stage 2  AP ADVANCE  — 3-way match: PO, GRN, GL code, approval limit.
-  Stage 3  TRACE       — Fraud checks: duplicate invoice, amount anomaly.
-  Stage 4  ASSIST      — Claude writes the final decision and action note.
+  Stage 1  EXTRACTIQ   — Display key fields from the extracted JSON.
+  Stage 2  PROCESSORIQ — 3-way match: PO, GRN, GL code, approval limit.
+  Stage 3  AUDITIQ     — Fraud checks: duplicate invoice, amount anomaly.
+  Stage 4  HELPDESKIQ  — Claude writes the final decision and action note.
 
 At the end a summary table shows the decision and SLA for every invoice.
 
@@ -446,7 +446,7 @@ def run_agent_with_tools(system_prompt: str, user_prompt: str,
         system_prompt  — tells Claude what role it plays in this stage
         user_prompt    — the specific task (invoice details + instructions)
         tools          — list of Anthropic tool definitions for this stage
-        stage_label    — used only for printing (e.g. "Stage 2 AP Advance")
+        stage_label    — used only for printing (e.g. "Stage 2 ProcessorIQ")
     """
     # The messages list is the full conversation history.
     # We always start with just the user's message.
@@ -512,14 +512,14 @@ def run_agent_with_tools(system_prompt: str, user_prompt: str,
     return ""
 
 
-# ── 6. STAGE 1 — CAPTURE ──────────────────────────────────────────────────────
+# ── 6. STAGE 1 — EXTRACTIQ ──────────────────────────────────────────────────────
 def stage_1_capture(inv: dict) -> None:
     """
     Stage 1 is already done (capture.py did the PDF extraction).
     Here we simply read the extracted JSON and display the key fields.
     No API call is made in this stage.
     """
-    print("\n  === STAGE 1: CAPTURE ===")
+    print("\n  === STAGE 1: EXTRACTIQ ===")
     # Print the key fields a human reviewer would check at a glance
     fields = [
         ("Vendor",          inv.get("vendor_name")),
@@ -535,7 +535,7 @@ def stage_1_capture(inv: dict) -> None:
         print(f"  {label:<18}: {value}")
 
 
-# ── 7. STAGE 2 — AP ADVANCE (3-WAY MATCH) ────────────────────────────────────
+# ── 7. STAGE 2 — PROCESSORIQ (3-WAY MATCH) ────────────────────────────────────
 def stage_2_ap_advance(inv: dict) -> str:
     """
     Stage 2 uses Claude + 5 tools to perform the 3-way match:
@@ -547,7 +547,7 @@ def stage_2_ap_advance(inv: dict) -> str:
 
     Returns Claude's written summary of all 5 checks.
     """
-    print("\n  === STAGE 2: AP ADVANCE — 3-WAY MATCH ===")
+    print("\n  === STAGE 2: PROCESSORIQ — 3-WAY MATCH ===")
 
     system = (
         "You are an AP (Accounts Payable) validation agent performing a 3-way match. "
@@ -569,12 +569,12 @@ def stage_2_ap_advance(inv: dict) -> str:
         f"  Invoice No:    {inv.get('invoice_number')}\n"
     )
 
-    result = run_agent_with_tools(system, user, TOOLS_STAGE2, "Stage 2 AP Advance")
+    result = run_agent_with_tools(system, user, TOOLS_STAGE2, "Stage 2 ProcessorIQ")
     print(f"\n{result}")
     return result
 
 
-# ── 8. STAGE 3 — TRACE (FRAUD CHECKS) ────────────────────────────────────────
+# ── 8. STAGE 3 — AUDITIQ (FRAUD CHECKS) ────────────────────────────────────────
 def stage_3_trace(inv: dict) -> str:
     """
     Stage 3 uses Claude + 2 tools to look for red flags:
@@ -583,7 +583,7 @@ def stage_3_trace(inv: dict) -> str:
 
     Returns Claude's written summary.
     """
-    print("\n  === STAGE 3: TRACE — FRAUD & ANOMALY CHECKS ===")
+    print("\n  === STAGE 3: AUDITIQ — FRAUD & ANOMALY CHECKS ===")
 
     system = (
         "You are an AP fraud-detection agent. "
@@ -600,12 +600,12 @@ def stage_3_trace(inv: dict) -> str:
         f"  Invoice No:   {inv.get('invoice_number')}\n"
     )
 
-    result = run_agent_with_tools(system, user, TOOLS_STAGE3, "Stage 3 Trace")
+    result = run_agent_with_tools(system, user, TOOLS_STAGE3, "Stage 3 AuditIQ")
     print(f"\n{result}")
     return result
 
 
-# ── 9. STAGE 4 — ASSIST (FINAL DECISION) ─────────────────────────────────────
+# ── 9. STAGE 4 — HELPDESIQ (FINAL DECISION) ─────────────────────────────────────
 def stage_4_assist(inv: dict, stage2_summary: str, stage3_summary: str) -> dict:
     """
     Stage 4 uses Claude (no tools) to synthesise all findings and produce:
@@ -617,7 +617,7 @@ def stage_4_assist(inv: dict, stage2_summary: str, stage3_summary: str) -> dict:
     Returns a dict with keys: decision, sla, full_text
     so main() can build the summary table.
     """
-    print("\n  === STAGE 4: ASSIST — FINAL DECISION ===")
+    print("\n  === STAGE 4: HELPDESIQ — FINAL DECISION ===")
 
     system = (
         "You are a senior AP decision agent. "
@@ -637,8 +637,8 @@ def stage_4_assist(inv: dict, stage2_summary: str, stage3_summary: str) -> dict:
     user = (
         f"Invoice: {inv.get('invoice_number')}  |  Vendor: {inv.get('vendor_name')}  "
         f"|  Amount: INR {inv.get('grand_total_inr'):,.2f}\n\n"
-        f"--- AP ADVANCE FINDINGS ---\n{stage2_summary}\n\n"
-        f"--- TRACE FINDINGS ---\n{stage3_summary}\n"
+        f"--- PROCESSORIQ FINDINGS ---\n{stage2_summary}\n\n"
+        f"--- AUDITIQ FINDINGS ---\n{stage3_summary}\n"
     )
 
     # Stage 4 is a single direct call — no tools needed, just generation

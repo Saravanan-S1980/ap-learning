@@ -5,7 +5,8 @@
       "Skill(claude-api)",
       "Bash(pip show:*)",
       "Bash(netstat -ano)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(ls:*)"
     ]
   }
 }
