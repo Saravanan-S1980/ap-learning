@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Skill(claude-api)",
+      "Bash(pip show:*)",
+      "Bash(netstat -ano)",
+      "Bash(python3:*)"
+    ]
+  }
+}

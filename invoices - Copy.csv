@@ -1,0 +1,17 @@
+invoice_id,vendor,amount_inr,currency,gl_code,invoice_date,status
+,ABC Infotech,800000,USD,7500,ABC,paid
+INV-1001,Tata Consultancy,125000,INR,6100,1/5/2025,paid
+INV-1002,Global Freight Co,68430.75,INR,5200,1/8/2025,paid
+INV-1003,Infosys BPO,320000,INR,7100,1/10/2025,pending
+INV-1004,Acme Office Supplies,47500.5,INR,6100,1/14/2025,approved
+INV-1005,Prime Utilities LLC,54020,INR,6300,1/15/2025,paid
+INV-1006,CloudHost Inc,198000,INR,7200,1/18/2025,on-hold
+INV-1007,Siemens India,612000,INR,5200,1/20/2025,approved
+INV-1008,Riverside Catering,34000,INR,6500,1/22/2025,paid
+INV-1009,Tata Consultancy,88000,INR,7100,2/1/2025,approved
+INV-1010,Prime Utilities LLC,61280,INR,6300,2/3/2025,on-hold
+INV-1011,Acme Office Supplies,43000,INR,6100,2/7/2025,pending
+INV-1012,BuildRight Contractors,950000,INR,5500,2/10/2025,approved
+INV-1013,Infosys BPO,198000,INR,7200,2/15/2025,paid
+INV-1014,Riverside Catering,29050,INR,6500,2/18/2025,pending
+INV-1015,BuildRight Contractors,275000,INR,5500,2/25/2025,on-hold

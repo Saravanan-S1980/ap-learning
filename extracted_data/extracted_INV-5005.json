@@ -1,0 +1,38 @@
+{
+  "invoice_number": "INV-5005",
+  "vendor_name": "Infosys BPO Limited",
+  "vendor_gst": "29AABCI1234M1ZX",
+  "invoice_date": "25-Mar-2026",
+  "due_date": "24-Apr-2026",
+  "po_reference": "PO-005",
+  "line_items": [
+    {
+      "description": "Accounts payable processing – Mar 2026",
+      "quantity": 1,
+      "unit_price_inr": 120000.0,
+      "total_inr": 120000.0
+    },
+    {
+      "description": "General ledger & reconciliation services",
+      "quantity": 1,
+      "unit_price_inr": 55000.0,
+      "total_inr": 55000.0
+    },
+    {
+      "description": "MIS reporting & analytics",
+      "quantity": 1,
+      "unit_price_inr": 35000.0,
+      "total_inr": 35000.0
+    }
+  ],
+  "subtotal_inr": 210000.0,
+  "shipping_charges_inr": 800.0,
+  "gst_type": "CGST+SGST",
+  "gst_rate_percent": 18,
+  "gst_amount_inr": 37944.0,
+  "grand_total_inr": 248744.0,
+  "payment_terms": "Net 30",
+  "bank_account": "5050101234567",
+  "ifsc_code": "AXIS0000505",
+  "hsn_sac_code": "SAC 998211"
+}

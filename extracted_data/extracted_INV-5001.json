@@ -1,0 +1,38 @@
+{
+  "invoice_number": "INV-5001",
+  "vendor_name": "Wipro Limited",
+  "vendor_gst": "29AAACW0X41F1ZA",
+  "invoice_date": "15-Mar-2026",
+  "due_date": "14-Apr-2026",
+  "po_reference": "PO-001",
+  "line_items": [
+    {
+      "description": "Server maintenance & monitoring (monthly)",
+      "quantity": 1,
+      "unit_price_inr": 50000.0,
+      "total_inr": 50000.0
+    },
+    {
+      "description": "Network infrastructure support",
+      "quantity": 1,
+      "unit_price_inr": 28000.0,
+      "total_inr": 28000.0
+    },
+    {
+      "description": "Hardware AMC charges",
+      "quantity": 1,
+      "unit_price_inr": 17000.0,
+      "total_inr": 17000.0
+    }
+  ],
+  "subtotal_inr": 95000.0,
+  "shipping_charges_inr": 1200.0,
+  "gst_type": "CGST+SGST",
+  "gst_rate_percent": 18,
+  "gst_amount_inr": 17316.0,
+  "grand_total_inr": 113516.0,
+  "payment_terms": "Net 30",
+  "bank_account": "000405009876543",
+  "ifsc_code": "HDFC0000040",
+  "hsn_sac_code": "SAC 998314"
+}

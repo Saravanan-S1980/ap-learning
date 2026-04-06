@@ -1,0 +1,32 @@
+{
+  "invoice_number": "INV-5004",
+  "vendor_name": "Reliance Industries Ltd – Utilities Division",
+  "vendor_gst": "27AAACR4849R1ZP",
+  "invoice_date": "22-Mar-2026",
+  "due_date": "06-Apr-2026",
+  "po_reference": "PO-004",
+  "line_items": [
+    {
+      "description": "Electricity charges – Feb 2026 (42,500 units)",
+      "quantity": 42500,
+      "unit_price_inr": 0.55,
+      "total_inr": 23375.0
+    },
+    {
+      "description": "Water supply charges – Feb 2026",
+      "quantity": 1,
+      "unit_price_inr": 5175.0,
+      "total_inr": 5175.0
+    }
+  ],
+  "subtotal_inr": 28550.0,
+  "shipping_charges_inr": 500.0,
+  "gst_type": "IGST",
+  "gst_rate_percent": 5,
+  "gst_amount_inr": 1452.5,
+  "grand_total_inr": 30502.5,
+  "payment_terms": "Net 15",
+  "bank_account": "9087654321001",
+  "ifsc_code": "SBIN0001234",
+  "hsn_sac_code": "HSN 2716"
+}

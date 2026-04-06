@@ -1,0 +1,5 @@
+po_number,vendor_name,po_amount_inr,status,gl_code
+PO-001,Wipro Limited,110000,open,6100
+PO-002,Mahindra Logistics Ltd,170000,open,5200
+PO-003,Tata Consultancy Services Ltd,400000,open,6100
+PO-004,Reliance Industries Ltd – Utilities Division,22000,open,6200

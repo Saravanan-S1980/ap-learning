@@ -1,0 +1,38 @@
+{
+  "invoice_number": "INV-5003",
+  "vendor_name": "Tata Consultancy Services Ltd",
+  "vendor_gst": "27AAACT2727Q1ZL",
+  "invoice_date": "20-Mar-2026",
+  "due_date": "19-Apr-2026",
+  "po_reference": "PO-003",
+  "line_items": [
+    {
+      "description": "Custom ERP module development – Phase 2",
+      "quantity": 1,
+      "unit_price_inr": 200000.0,
+      "total_inr": 200000.0
+    },
+    {
+      "description": "UAT support & bug fixes",
+      "quantity": 80,
+      "unit_price_inr": 1000.0,
+      "total_inr": 80000.0
+    },
+    {
+      "description": "Technical documentation & handover",
+      "quantity": 1,
+      "unit_price_inr": 40000.0,
+      "total_inr": 40000.0
+    }
+  ],
+  "subtotal_inr": 320000.0,
+  "shipping_charges_inr": 3500.0,
+  "gst_type": "CGST+SGST",
+  "gst_rate_percent": 18,
+  "gst_amount_inr": 58230.0,
+  "grand_total_inr": 381730.0,
+  "payment_terms": "Net 30",
+  "bank_account": "1234500078901",
+  "ifsc_code": "ICIC0000124",
+  "hsn_sac_code": "SAC 998313"
+}

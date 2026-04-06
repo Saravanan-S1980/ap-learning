@@ -1,0 +1,27 @@
+invoice_id,vendor,amount_inr,currency,gl_code,invoice_date,status
+INV-1001,Tata Consultancy,125000.00,INR,6100,2025-01-05,paid
+INV-1002,Global Freight Co,68430.75,INR,5200,2025-01-08,paid
+INV-1003,Infosys BPO,320000.00,INR,7100,2025-01-10,pending
+INV-1004,Acme Office Supplies,47500.50,INR,6100,2025-01-14,approved
+INV-1005,Prime Utilities LLC,54020.00,INR,6300,2025-01-15,paid
+INV-1006,CloudHost Inc,198000.00,INR,7200,2025-01-18,on-hold
+INV-1007,Siemens India,612000.00,INR,5200,2025-01-20,approved
+INV-1008,Riverside Catering,34000.00,INR,6500,2025-01-22,paid
+INV-1009,Tata Consultancy,88000.00,INR,7100,2025-02-01,approved
+INV-1010,Prime Utilities LLC,61280.00,INR,6300,2025-02-03,on-hold
+INV-1011,Acme Office Supplies,43000.00,INR,6100,2025-02-07,pending
+INV-1012,BuildRight Contractors,950000.00,INR,5500,2025-02-10,approved
+INV-1013,Infosys BPO,198000.00,INR,7200,2025-02-15,paid
+INV-1014,Riverside Catering,29050.00,INR,6500,2025-02-18,pending
+INV-1015,BuildRight Contractors,275000.00,INR,5500,2025-02-25,on-hold
+
+INV-1016,Wipro Limited,88000.00,INR,6100,2026-01-10,paid
+INV-1017,Wipro Limited,92000.00,INR,6100,2026-02-10,paid
+INV-1018,Mahindra Logistics Ltd,130000.00,INR,5200,2026-01-15,paid
+INV-1019,Mahindra Logistics Ltd,155000.00,INR,5200,2026-02-15,paid
+INV-1020,Tata Consultancy Services Ltd,120000.00,INR,6100,2026-01-20,paid
+INV-1021,Tata Consultancy Services Ltd,135000.00,INR,6100,2026-02-20,paid
+INV-1022,Reliance Industries Ltd – Utilities Division,26500.00,INR,6200,2026-01-22,paid
+INV-1023,Reliance Industries Ltd – Utilities Division,24000.00,INR,6200,2026-02-22,paid
+INV-1024,Infosys BPO Limited,185000.00,INR,7100,2026-01-25,paid
+INV-1025,Infosys BPO Limited,210000.00,INR,7100,2026-02-25,paid

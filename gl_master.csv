@@ -1,0 +1,8 @@
+gl_code,description,category,valid_for_categories
+6100,IT Services & Software,IT Services,"IT Services,BPO Services"
+5200,Freight & Logistics,Logistics,Logistics
+6200,Utilities & Facilities,Utilities,Utilities
+7100,Business Process Outsourcing,BPO Services,"BPO Services,IT Services"
+5500,Contractor & Construction,Construction,Construction
+6500,Catering & Events,Catering,Catering
+6300,Office Supplies,Office,"Office,Administrative"

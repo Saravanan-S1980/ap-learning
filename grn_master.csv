@@ -1,0 +1,5 @@
+grn_number,po_number,vendor_name,received_date,grn_status
+GRN-001,PO-001,Wipro Limited,2026-03-10,received
+GRN-002,PO-002,Mahindra Logistics Ltd,2026-03-15,received
+GRN-003,PO-003,Tata Consultancy Services Ltd,2026-03-18,partial
+GRN-004,PO-004,Reliance Industries Ltd – Utilities Division,2026-03-20,received
