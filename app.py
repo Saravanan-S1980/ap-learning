@@ -293,11 +293,25 @@ load_dotenv()
 ANTHROPIC_API_KEY = st.secrets.get("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
 
 
+@st.cache_data
 def _csv_rows(filename: str) -> list:
     """Read a master CSV from the project folder, return list of dicts."""
     path = os.path.join(_BASE, filename)
     with open(path, encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+@st.cache_data(ttl=300)
+def _load_invoices_df() -> "pd.DataFrame":
+    """Load and preprocess invoices.csv. Cached for 5 minutes."""
+    inv_path = os.path.join(_BASE, "invoices.csv")
+    if not os.path.exists(inv_path):
+        return pd.DataFrame()
+    df = pd.read_csv(inv_path)
+    df["invoice_date"] = pd.to_datetime(df["invoice_date"], errors="coerce")
+    df["status"]       = df["status"].str.strip().str.lower()
+    df["amount_inr"]   = pd.to_numeric(df["amount_inr"], errors="coerce").fillna(0)
+    return df
 
 
 # ── PDF + Claude extraction ────────────────────────────────────────────────────
@@ -707,8 +721,8 @@ def _parse_s3_checks(log: list) -> list:
 def page_dashboard():
     st.title("Dashboard")
 
-    inv_path = os.path.join(_BASE, "invoices.csv")
-    if not os.path.exists(inv_path):
+    df = _load_invoices_df()
+    if df.empty:
         st.markdown(
             "<div style='background:#1E2130; border-radius:8px; padding:2rem; "
             "text-align:center; color:#8B8FA8; margin-top:2rem;'>"
@@ -718,11 +732,6 @@ def page_dashboard():
             unsafe_allow_html=True,
         )
         return
-
-    df = pd.read_csv(inv_path)
-    df["invoice_date"] = pd.to_datetime(df["invoice_date"], errors="coerce")
-    df["status"]       = df["status"].str.strip().str.lower()
-    df["amount_inr"]   = pd.to_numeric(df["amount_inr"], errors="coerce").fillna(0)
 
     # ── Row 1: Metric cards ───────────────────────────────────────────────────
     total_invoices     = len(df)
@@ -1480,8 +1489,8 @@ def page_invoice_register():
             st.session_state[_k] = _v
 
     # ── Load & prepare data ───────────────────────────────────────────────────
-    inv_path = os.path.join(_BASE, "invoices.csv")
-    if not os.path.exists(inv_path):
+    df = _load_invoices_df()
+    if df.empty:
         st.markdown(
             "<div style='background:#1E2130; border-radius:8px; padding:2.5rem; "
             "text-align:center; color:#8B8FA8; margin-top:2rem;'>"
@@ -1489,11 +1498,6 @@ def page_invoice_register():
             unsafe_allow_html=True,
         )
         return
-
-    df = pd.read_csv(inv_path)
-    df["invoice_date"] = pd.to_datetime(df["invoice_date"], errors="coerce")
-    df["status"]       = df["status"].str.strip().str.lower()
-    df["amount_inr"]   = pd.to_numeric(df["amount_inr"], errors="coerce").fillna(0)
 
     hold_ids = df[df["status"] == "on-hold"]["invoice_id"].tolist()
     df["priority"] = df.apply(
