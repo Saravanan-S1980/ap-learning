@@ -1823,7 +1823,6 @@ def page_invoice_register():
                     st.session_state.ir_chat_open = (
                         not st.session_state.ir_chat_open
                     )
-                    st.rerun()
 
             # ── FIX 3: Hidden JS→Python bridge input ─────────────────────────
             # (made invisible via CSS targeting .st-key-ir_chat_trigger)
@@ -1888,12 +1887,24 @@ def page_invoice_register():
 <script>
 (function() {{
   var isOpen = {_open_flag};
+  var existing = window.parent.document.getElementById('ap-float-chat');
 
-  // Always remove previous instance so it refreshes with new history
-  var old = window.parent.document.getElementById('ap-float-chat');
-  if (old) old.remove();
+  if (!isOpen) {{
+    if (existing) existing.remove();
+    return;
+  }}
 
-  if (!isOpen) return;
+  // If box already exists, only refresh the messages area — do NOT
+  // recreate the whole element, as that re-fires event listeners on
+  // every Streamlit rerun and causes a continuous rerun loop on Cloud.
+  if (existing) {{
+    var md = existing.querySelector('#ap-fc-msgs');
+    if (md) {{
+      md.innerHTML = `{_msgs_html}{_placeholder_html}`;
+      md.scrollTop = md.scrollHeight;
+    }}
+    return;
+  }}
 
   // Create box
   var box = window.parent.document.createElement('div');
