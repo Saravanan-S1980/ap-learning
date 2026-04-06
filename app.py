@@ -768,7 +768,7 @@ def page_dashboard():
             yaxis=dict(showgrid=False, color="#E8EAF0"),
             height=280,
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar)
 
     # Right — invoice count by status (donut chart)
     with ch_right:
@@ -799,7 +799,7 @@ def page_dashboard():
             ),
             height=280,
         )
-        st.plotly_chart(fig_donut, use_container_width=True)
+        st.plotly_chart(fig_donut)
 
     # ── Row 3: Recent activity table ──────────────────────────────────────────
     st.markdown(
@@ -1513,11 +1513,14 @@ def page_invoice_register():
     if st.session_state.ir_selected_id is None and not sorted_df.empty:
         st.session_state.ir_selected_id = sorted_df.iloc[0]["invoice_id"]
 
-    # ── FIX 3: Process pending JS→Python chat message ─────────────────────────
+    # ── Process pending JS→Python chat message ───────────────────────────────
+    # Read but do NOT write back to ir_chat_trigger — writing to a widget key
+    # from outside the widget causes Streamlit to detect a state mismatch and
+    # triggers a spurious rerun loop on Streamlit Cloud. De-dup via
+    # ir_chat_last_msg is sufficient to prevent double-processing.
     _pending = st.session_state.ir_chat_trigger
     if _pending and _pending != st.session_state.ir_chat_last_msg:
         st.session_state.ir_chat_last_msg = _pending
-        st.session_state.ir_chat_trigger  = ""
         if _pending == "__CLOSE__":
             st.session_state.ir_chat_open = False
         else:
