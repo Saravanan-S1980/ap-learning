@@ -26,3 +26,26 @@ class ExtractionResult(BaseModel):
     markers: list[ExtractedMarker] = []
     extraction_confidence: float = 0.0
     warnings: list[str] = []
+
+
+# ── Analysis chain models ────────────────────────────────────────────────────
+
+class FlaggedMarker(BaseModel):
+    """A marker that is outside its lab or optimal range, enriched with Claude's assessment."""
+    marker: ExtractedMarker
+    canonical_name: str
+    # Comparison against population lab reference
+    lab_status: Literal["normal", "low", "high"]
+    # Comparison against evidence-based optimal range
+    optimal_status: Literal["optimal", "suboptimal_low", "suboptimal_high"]
+    # Clinical significance assigned by Claude
+    severity: Literal["normal", "mild", "moderate", "significant"] = "mild"
+    clinical_notes: str = ""
+    related_markers: list[str] = []
+    retest_weeks: int = 12
+
+
+class FlaggingResult(BaseModel):
+    flagged_markers: list[FlaggedMarker] = []
+    normal_markers: list[ExtractedMarker] = []
+    warnings: list[str] = []

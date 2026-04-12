@@ -19,8 +19,7 @@ build/
 venv/
 env/
 
-# Database
-data/
+# Database files (*.db / *.sqlite3 patterns cover the runtime database)
 *.db
 *.sqlite3
 

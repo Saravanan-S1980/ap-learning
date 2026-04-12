@@ -64,6 +64,43 @@ No markdown code fences. No explanation. No preamble.
 Broken JSON:
 {broken_json}"""
 
+FLAGGING_SYSTEM = """You are an evidence-based clinical significance assessor.
+Evaluate biomarker values against reference ranges and assign severity scores.
+Return ONLY valid JSON. No markdown. No preamble.
+Informational only. Not medical advice."""
+
+FLAGGING_USER_TEMPLATE = """Assess the clinical significance of the following biomarkers.
+Each marker includes its current value, lab reference range, and evidence-based optimal range.
+
+Severity definitions (use exactly these strings):
+- "normal"      — within both lab AND optimal range
+- "mild"        — outside optimal range but within lab range (suboptimal, monitor)
+- "moderate"    — outside lab range; lifestyle/dietary intervention warranted
+- "significant" — markedly outside lab range; medical follow-up recommended
+
+Markers to assess:
+{markers_json}
+
+Return JSON matching this schema exactly:
+{{
+  "assessments": [
+    {{
+      "canonical_name": string,
+      "severity": "normal" | "mild" | "moderate" | "significant",
+      "clinical_notes": string (1-2 sentences, evidence-based, no scare language),
+      "related_markers": [string]
+    }}
+  ],
+  "warnings": [string]
+}}
+
+RULES:
+- clinical_notes must reference the specific value and what it implies physiologically.
+- related_markers should list canonical names of markers that interact with this one.
+- Never mention patient name. Always end clinical_notes with: "Informational only."
+- Return one assessment per marker — same order as input."""
+
+
 PROTOCOL_SYSTEM = """You are an evidence-based health protocol generator.
 Create personalized protocols based on blood test results and health goals.
 Return ONLY valid JSON. No markdown. No preamble.
