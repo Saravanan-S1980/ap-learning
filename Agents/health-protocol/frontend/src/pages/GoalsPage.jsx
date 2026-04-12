@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import MobileShell from '../components/layout/MobileShell';
+import { api } from '../services/api';
 
 const GOALS = [
   { id: 'cardiovascular_health', label: 'Heart Health',   emoji: '❤️' },
@@ -16,8 +18,15 @@ const GOALS = [
 ];
 
 export default function GoalsPage() {
-  const navigate = useNavigate();
+  const navigate       = useNavigate();
+  const { state }      = useLocation();
+  const markers        = state?.markers ?? [];
+
   const [selected, setSelected] = useState([]);
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState(null);
+
+  console.log('[GoalsPage] markers received:', markers.length);
 
   function toggle(id) {
     setSelected((prev) =>
@@ -29,6 +38,25 @@ export default function GoalsPage() {
     );
   }
 
+  async function handleGenerate() {
+    if (selected.length === 0 || markers.length === 0) return;
+
+    setError(null);
+    setLoading(true);
+    console.log('[GoalsPage] calling /api/analyze with', markers.length, 'markers, goals:', selected);
+
+    try {
+      const result = await api.analyze(markers, selected);
+      console.log('[GoalsPage] analyze response — protocol_id:', result.protocol_id);
+      navigate(`/protocol/${result.protocol_id}`, { state: { protocol: result.protocol } });
+    } catch (err) {
+      console.error('[GoalsPage] analyze error:', err);
+      setError(err.message || 'Analysis failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Your Goals" backPath="/review">
       <div className="flex flex-col gap-4 p-4">
@@ -37,15 +65,29 @@ export default function GoalsPage() {
           What do you want to improve? <strong>Pick up to 3.</strong>
         </p>
 
+        {markers.length === 0 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-sm text-amber-800">
+            No markers loaded — go back and upload a report first.
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-50 border border-red-300 text-red-700 rounded-2xl px-4 py-3 text-sm">
+            {error}
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-3">
           {GOALS.map(({ id, label, emoji }) => {
             const active = selected.includes(id);
             return (
               <button
                 key={id}
+                disabled={loading}
                 onClick={() => toggle(id)}
                 className={`min-h-[72px] rounded-2xl border-2 flex flex-col items-center
                   justify-center gap-1 transition-colors text-sm font-semibold
+                  disabled:opacity-50
                   ${active
                     ? 'border-blue-600 bg-blue-50 text-blue-700'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
@@ -59,14 +101,22 @@ export default function GoalsPage() {
         </div>
 
         <button
-          disabled={selected.length === 0}
-          onClick={() => navigate('/protocol')}
+          disabled={selected.length === 0 || markers.length === 0 || loading}
+          onClick={handleGenerate}
           className="w-full min-h-[52px] bg-blue-600 text-white rounded-2xl
             font-semibold text-base hover:bg-blue-700 active:bg-blue-800
-            disabled:opacity-40 disabled:pointer-events-none transition-colors shadow"
+            disabled:opacity-40 disabled:pointer-events-none transition-colors shadow
+            flex items-center justify-center gap-2"
         >
-          Generate Protocol →
+          {loading && <Loader2 size={20} className="animate-spin" />}
+          {loading ? 'Generating protocol…' : 'Generate Protocol →'}
         </button>
+
+        {loading && (
+          <p className="text-center text-sm text-slate-500">
+            Claude is analysing your markers — this takes about 15 seconds.
+          </p>
+        )}
       </div>
     </MobileShell>
   );

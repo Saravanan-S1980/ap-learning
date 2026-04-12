@@ -1,4 +1,4 @@
-const BASE_URL = '/api'; // Vite proxy forwards to http://localhost:8000
+const BASE_URL = '/api'; // Vite proxy forwards to http://localhost:8001
 
 async function request(method, path, body) {
   const opts = {

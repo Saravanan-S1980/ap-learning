@@ -11,7 +11,7 @@ export default function App() {
         <Route path="/"         element={<UploadPage />} />
         <Route path="/review"   element={<ReviewPage />} />
         <Route path="/goals"    element={<GoalsPage />} />
-        <Route path="/protocol" element={<ProtocolPage />} />
+        <Route path="/protocol/:id" element={<ProtocolPage />} />
         <Route path="*"         element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

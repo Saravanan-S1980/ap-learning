@@ -7,7 +7,7 @@ class ExtractedMarker(BaseModel):
     reported_name: str
     value: float | None = None
     qualitative_value: str | None = None
-    unit: str
+    unit: str = ""   # empty for dimensionless ratios (Chol/HDL, AIP, etc.)
     reference_low: float | None = None
     reference_high: float | None = None
     flag: Literal["normal", "low", "high", "critical_low", "critical_high"] = "normal"
