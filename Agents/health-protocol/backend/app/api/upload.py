@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.services.pdf_extractor import extract_text
+from app.services.marker_parser import parse_markers
 
 router = APIRouter()
 
@@ -41,41 +42,58 @@ async def upload_report(file: UploadFile = File(...)) -> JSONResponse:
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(content)
 
-    # Only attempt text extraction on PDFs
-    extracted_text: str | None = None
-    page_count: int | None = None
-    warnings: list[str] = []
+    # Only attempt extraction pipeline on PDFs
+    if file.content_type != "application/pdf":
+        response_body: dict = {
+            "status": "uploaded",
+            "filename": stored_name,
+            "original_filename": file.filename,
+            "size_bytes": len(content),
+            "content_type": file.content_type,
+        }
+        return JSONResponse(status_code=200, content=response_body)
 
-    if file.content_type == "application/pdf":
-        try:
-            result = extract_text(dest)
-            extracted_text = result.text
-            page_count = result.pages
-            warnings = result.warnings
-        except ValueError as exc:
-            # Password-protected — keep the file but surface the error
+    # --- PDF pipeline: extract text → parse markers ---
+    try:
+        pdf_result = extract_text(dest)
+    except ValueError as exc:
+        dest.unlink(missing_ok=True)
+        raise HTTPException(status_code=422, detail=str(exc))
+    except RuntimeError as exc:
+        dest.unlink(missing_ok=True)
+        raise HTTPException(status_code=422, detail=str(exc))
+    finally:
+        # Per CLAUDE.md: delete uploaded PDFs after extraction
+        if dest.exists():
             dest.unlink(missing_ok=True)
-            raise HTTPException(status_code=422, detail=str(exc))
-        except RuntimeError as exc:
-            # Corrupt / unreadable PDF
-            dest.unlink(missing_ok=True)
-            raise HTTPException(status_code=422, detail=str(exc))
-        finally:
-            # Per CLAUDE.md: delete uploaded PDFs after extraction
-            if dest.exists():
-                dest.unlink(missing_ok=True)
 
-    response_body: dict = {
+    # Collect warnings from PDF extraction stage
+    all_warnings: list[str] = list(pdf_result.warnings)
+
+    try:
+        extraction = await parse_markers(pdf_result.text)
+    except ValueError as exc:
+        # Claude returned unparseable JSON even after repair
+        raise HTTPException(status_code=422, detail=f"Marker extraction failed: {exc}")
+    except RuntimeError as exc:
+        # Claude API exhausted retries
+        raise HTTPException(status_code=503, detail=f"AI service unavailable: {exc}")
+
+    # Merge warnings from both stages
+    all_warnings.extend(extraction.warnings)
+
+    response_body = {
         "status": "uploaded",
         "filename": stored_name,
         "original_filename": file.filename,
         "size_bytes": len(content),
         "content_type": file.content_type,
+        "pages": pdf_result.pages,
+        "lab_name": extraction.lab_name,
+        "report_date": extraction.report_date,
+        "markers": [m.model_dump() for m in extraction.markers],
+        "extraction_confidence": extraction.extraction_confidence,
+        "warnings": all_warnings,
     }
-
-    if extracted_text is not None:
-        response_body["text"] = extracted_text
-        response_body["pages"] = page_count
-        response_body["warnings"] = warnings
 
     return JSONResponse(status_code=200, content=response_body)
