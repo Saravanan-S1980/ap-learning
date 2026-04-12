@@ -106,22 +106,73 @@ Create personalized protocols based on blood test results and health goals.
 Return ONLY valid JSON. No markdown. No preamble.
 Always include: Informational only. Not medical advice."""
 
-PROTOCOL_USER_TEMPLATE = """Generate a health protocol for the following:
+PROTOCOL_USER_TEMPLATE = """Generate a personalized health protocol for the following blood test results.
 
-Flagged markers:
+User's selected goals: {goals}
+
+Flagged markers (JSON):
 {flagged_markers}
 
-User goals: {goals}
-
-Cross-reference analysis:
+Goal cross-reference (which markers map to which goals):
 {crossref}
 
-Return JSON matching this schema:
+INDIAN FOOD CONTEXT — prioritize locally available foods:
+- Omega-3 / anti-inflammatory: flaxseed (alsi), mustard oil, walnuts, mackerel (bangda), rohu, sardine (tarli)
+- Soluble fiber: psyllium husk (isabgol), oats, moong dal, sabja seeds
+- Anti-inflammatory spices: turmeric (haldi) + black pepper, ginger (adrak), garlic (lehsun), amla
+- Plant protein: moong dal, chana dal, rajma, soya chunks, paneer, curd (dahi)
+- B12 sources: eggs, chicken, fish, fortified milk
+- Iron: kala chana, spinach (palak) + lemon, jaggery (gud), horse gram (kulith)
+- Vitamin D food sources are limited — supplementation usually needed in India
+- Cost-conscious: prefer dal/sabzi/curd/eggs over expensive superfoods
+
+SUPPLEMENT GUIDANCE:
+- Prefer clinically validated forms: Methylcobalamin (B12), Cholecalciferol D3, Magnesium glycinate
+- Indian brands available: Carbamide Forte, HealthKart, Himalaya, NOW Foods (Amazon India)
+- For Omega-3: minimum 1g combined EPA+DHA daily for lipid effects
+- Only recommend supplements with clear evidence for the specific marker
+
+PROTOCOL RULES:
+1. diet_changes: max 5 actions. Split into "immediate" (start today) and "phase_in" (introduce over 2–4 weeks).
+2. supplements: only for markers where food sources are insufficient. Include dose, timing, duration.
+3. lifestyle_changes: specific and actionable (e.g., "30-min brisk walk 5x/week", not "exercise more").
+4. retest_schedule: use retest_weeks from the flagged marker data. Include clinical reason for each.
+5. All actions must directly address at least one flagged marker.
+6. End each diet/lifestyle action's rationale with: "Informational only."
+
+Return JSON matching this schema exactly:
 {{
-  "diet_changes": [{{"action": string, "phase": "immediate"|"phase_in"}}],
-  "supplements": [
-    {{"name": string, "dose": string, "timing": string, "duration_weeks": number, "targets": [string]}}
+  "diet_changes": [
+    {{
+      "action": string,
+      "rationale": string,
+      "phase": "immediate" | "phase_in",
+      "targets": [string]
+    }}
   ],
-  "lifestyle_changes": [{{"action": string, "frequency": string}}],
-  "retest_schedule": [{{"marker": string, "weeks_from_now": number, "reason": string}}]
+  "supplements": [
+    {{
+      "name": string,
+      "dose": string,
+      "timing": string,
+      "duration_weeks": number,
+      "targets": [string],
+      "notes": string
+    }}
+  ],
+  "lifestyle_changes": [
+    {{
+      "action": string,
+      "frequency": string,
+      "rationale": string,
+      "targets": [string]
+    }}
+  ],
+  "retest_schedule": [
+    {{
+      "marker": string,
+      "weeks_from_now": number,
+      "reason": string
+    }}
+  ]
 }}"""

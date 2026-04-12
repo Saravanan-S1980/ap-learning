@@ -1,5 +1,12 @@
-# Protocol output models — placeholder
+"""Protocol output models."""
 from pydantic import BaseModel
+
+
+class DietChange(BaseModel):
+    action: str
+    rationale: str = ""
+    phase: str = "immediate"   # "immediate" | "phase_in"
+    targets: list[str] = []
 
 
 class SupplementRecommendation(BaseModel):
@@ -8,16 +15,14 @@ class SupplementRecommendation(BaseModel):
     timing: str
     duration_weeks: int
     targets: list[str] = []
-
-
-class DietChange(BaseModel):
-    action: str
-    phase: str  # "immediate" | "phase_in"
+    notes: str = ""
 
 
 class LifestyleChange(BaseModel):
     action: str
     frequency: str
+    rationale: str = ""
+    targets: list[str] = []
 
 
 class RetestItem(BaseModel):
@@ -27,12 +32,13 @@ class RetestItem(BaseModel):
 
 
 class Protocol(BaseModel):
-    extraction_id: str
-    goals: list[str]
+    extraction_id: str = ""
+    goals: list[str] = []
     diet_changes: list[DietChange] = []
     supplements: list[SupplementRecommendation] = []
     lifestyle_changes: list[LifestyleChange] = []
     retest_schedule: list[RetestItem] = []
+    warnings: list[str] = []
     disclaimer: str = (
         "This protocol is for informational purposes only and does not "
         "constitute medical advice. Consult a qualified healthcare provider "

@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.api.upload import router as upload_router
+from app.api.analyze import router as analyze_router
+from app.api.protocol import router as protocol_router
 
 
 @asynccontextmanager
@@ -32,6 +34,8 @@ app.add_middleware(
 )
 
 app.include_router(upload_router, prefix="/api")
+app.include_router(analyze_router, prefix="/api")
+app.include_router(protocol_router, prefix="/api")
 
 
 @app.get("/health")
