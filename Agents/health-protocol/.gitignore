@@ -1,0 +1,44 @@
+# Environment
+.env
+
+# Uploads (patient data — never commit)
+uploads/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Database
+data/
+*.db
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend (generated)
+frontend/dist/
+frontend/node_modules/
+frontend/android/
+frontend/ios/

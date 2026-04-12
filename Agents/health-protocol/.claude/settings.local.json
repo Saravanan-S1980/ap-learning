@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude:*)",
+      "Bash(python -m venv .venv)",
+      "Bash(.venv/Scripts/pip install:*)",
+      "Bash(PYTHONPATH=backend .venv/Scripts/uvicorn app.main:app --host 0.0.0.0 --port 8000)",
+      "Bash(echo \"Server PID: $!\")",
+      "Bash(curl:*)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(m.upper\\(\\), p\\) for p,ops in d['paths'].items\\(\\) for m in ops]\")"
+    ]
+  }
+}
