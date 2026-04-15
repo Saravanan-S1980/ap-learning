@@ -18,15 +18,16 @@ const GOALS = [
 ];
 
 export default function GoalsPage() {
-  const navigate       = useNavigate();
-  const { state }      = useLocation();
-  const markers        = state?.markers ?? [];
+  const navigate     = useNavigate();
+  const { state }    = useLocation();
+  const markers      = state?.markers ?? [];
+  const extractionId = state?.extractionId ?? '';
 
   const [selected, setSelected] = useState([]);
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState(null);
 
-  console.log('[GoalsPage] markers received:', markers.length);
+  console.log('[GoalsPage] markers:', markers.length, 'extractionId:', extractionId);
 
   function toggle(id) {
     setSelected((prev) =>
@@ -43,12 +44,18 @@ export default function GoalsPage() {
 
     setError(null);
     setLoading(true);
-    console.log('[GoalsPage] calling /api/analyze with', markers.length, 'markers, goals:', selected);
+    console.log('[GoalsPage] calling /api/analyze, goals:', selected);
 
     try {
-      const result = await api.analyze(markers, selected);
+      const result = await api.analyze(markers, selected, extractionId);
       console.log('[GoalsPage] analyze response — protocol_id:', result.protocol_id);
-      navigate(`/protocol/${result.protocol_id}`, { state: { protocol: result.protocol } });
+      navigate(`/protocol/${result.protocol_id}`, {
+        state: {
+          protocol: result.protocol,
+          extractionId,
+          backPath: extractionId ? `/review/${extractionId}` : '/',
+        },
+      });
     } catch (err) {
       console.error('[GoalsPage] analyze error:', err);
       setError(err.message || 'Analysis failed. Please try again.');
@@ -57,8 +64,10 @@ export default function GoalsPage() {
     }
   }
 
+  const backPath = extractionId ? `/review/${extractionId}` : '/';
+
   return (
-    <MobileShell title="Your Goals" backPath="/review">
+    <MobileShell title="Your Goals" backPath={backPath}>
       <div className="flex flex-col gap-4 p-4">
 
         <p className="text-base text-slate-600">

@@ -1,3 +1,4 @@
+import json
 import uuid
 from pathlib import Path
 
@@ -5,6 +6,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 
 from app.config import settings
+from app.models.database import ExtractionRecord, AsyncSessionLocal
 from app.services.pdf_extractor import extract_text
 from app.services.marker_parser import parse_markers
 
@@ -56,10 +58,7 @@ async def upload_report(file: UploadFile = File(...)) -> JSONResponse:
     # --- PDF pipeline: extract text → parse markers ---
     try:
         pdf_result = extract_text(dest)
-    except ValueError as exc:
-        dest.unlink(missing_ok=True)
-        raise HTTPException(status_code=422, detail=str(exc))
-    except RuntimeError as exc:
+    except (ValueError, RuntimeError) as exc:
         dest.unlink(missing_ok=True)
         raise HTTPException(status_code=422, detail=str(exc))
     finally:
@@ -67,23 +66,35 @@ async def upload_report(file: UploadFile = File(...)) -> JSONResponse:
         if dest.exists():
             dest.unlink(missing_ok=True)
 
-    # Collect warnings from PDF extraction stage
     all_warnings: list[str] = list(pdf_result.warnings)
 
     try:
         extraction = await parse_markers(pdf_result.text)
     except ValueError as exc:
-        # Claude returned unparseable JSON even after repair
         raise HTTPException(status_code=422, detail=f"Marker extraction failed: {exc}")
     except RuntimeError as exc:
-        # Claude API exhausted retries
         raise HTTPException(status_code=503, detail=f"AI service unavailable: {exc}")
 
-    # Merge warnings from both stages
     all_warnings.extend(extraction.warnings)
+
+    # Persist to DB
+    extraction_id = uuid.uuid4().hex
+    record = ExtractionRecord(
+        id=extraction_id,
+        filename=stored_name,
+        lab_name=extraction.lab_name,
+        report_date=extraction.report_date,
+        extraction_confidence=extraction.extraction_confidence,
+        raw_json=json.dumps([m.model_dump() for m in extraction.markers]),
+        marker_count=len(extraction.markers),
+    )
+    async with AsyncSessionLocal() as db:
+        db.add(record)
+        await db.commit()
 
     response_body = {
         "status": "uploaded",
+        "extraction_id": extraction_id,
         "filename": stored_name,
         "original_filename": file.filename,
         "size_bytes": len(content),

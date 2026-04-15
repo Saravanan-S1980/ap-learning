@@ -5,18 +5,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.models.database import init_db
 from app.api.upload import router as upload_router
 from app.api.analyze import router as analyze_router
 from app.api.protocol import router as protocol_router
+from app.api.markers import router as markers_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: ensure required directories exist
+    # Startup: ensure required directories exist and DB tables are created
     os.makedirs(settings.upload_dir, exist_ok=True)
     os.makedirs("./data", exist_ok=True)
+    await init_db()
     yield
-    # Shutdown: nothing to clean up yet
+    # Shutdown: nothing to clean up
 
 
 app = FastAPI(
@@ -36,6 +39,7 @@ app.add_middleware(
 app.include_router(upload_router, prefix="/api")
 app.include_router(analyze_router, prefix="/api")
 app.include_router(protocol_router, prefix="/api")
+app.include_router(markers_router, prefix="/api")
 
 
 @app.get("/health")

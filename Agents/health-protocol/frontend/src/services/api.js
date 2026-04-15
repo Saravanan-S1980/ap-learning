@@ -42,6 +42,9 @@ export const api = {
   /** GET /api/protocol/{id} */
   getProtocol: (id) => request('GET', `/protocol/${id}`),
 
+  /** GET /api/protocols — all past protocols, newest first */
+  getProtocols: () => request('GET', '/protocols'),
+
   /** GET /health */
   health: () => request('GET', '/health').catch(() => null),
 };

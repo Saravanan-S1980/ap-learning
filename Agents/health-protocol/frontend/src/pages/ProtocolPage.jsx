@@ -107,6 +107,10 @@ export default function ProtocolPage() {
   const { id }       = useParams();
   const { state }    = useLocation();
 
+  // Resolve back destination: prefer explicit backPath, then review page, then home
+  const backPath = state?.backPath
+    ?? (state?.extractionId ? `/review/${state.extractionId}` : '/');
+
   // Use protocol passed via navigation state first (avoids a round-trip),
   // then fall back to fetching from the API if page is loaded directly by URL.
   const [protocol, setProtocol] = useState(state?.protocol ?? null);
@@ -131,7 +135,7 @@ export default function ProtocolPage() {
   );
 
   return (
-    <MobileShell title="Your Protocol" backPath="/goals" headerRight={shareBtn}>
+    <MobileShell title="Your Protocol" backPath={backPath} headerRight={shareBtn}>
       <div className="flex flex-col gap-4 p-4">
 
         {/* Disclaimer */}

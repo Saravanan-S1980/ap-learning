@@ -103,7 +103,12 @@ async def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
 
     # ── Store and return ─────────────────────────────────────────────────────
     protocol_id = uuid.uuid4().hex
-    save_protocol(protocol_id, protocol)
+    await save_protocol(
+        protocol_id,
+        protocol,
+        goals=request.goals,
+        extraction_id=extraction_id,
+    )
 
     return AnalyzeResponse(
         protocol_id=protocol_id,
