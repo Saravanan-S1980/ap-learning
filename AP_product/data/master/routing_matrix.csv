@@ -1,0 +1,15 @@
+exception_type,company_code,primary_resolver_role,fallback_1,fallback_2,sla_hours
+PRICE_MISMATCH,1000,Buyer,PO Creator,Plant Controller,24
+QTY_MISMATCH,1000,Buyer,Warehouse SPOC,Plant Controller,24
+PENDING_GRN,1000,Warehouse SPOC,Buyer,Plant Controller,48
+NO_PO,1000,Requester,Cost Center Owner,AP Lead,48
+MISSING_REQUESTER,1000,AP Lead,Cost Center Owner,Plant Controller,24
+NEW_VENDOR,1000,Vendor Master Team,AP Lead,Plant Controller,48
+TAX_MISMATCH,1000,Tax Team,Buyer,AP Lead,24
+DUPLICATE,1000,AP Lead,Super User,Plant Controller,12
+PRICE_MISMATCH,2000,Buyer,PO Creator,Super User,24
+PENDING_GRN,2000,Warehouse SPOC,Buyer,Super User,48
+NO_PO,2000,Requester,Cost Center Owner,AP Lead,48
+PRICE_MISMATCH,3000,Buyer,PO Creator,Plant Controller,24
+PENDING_GRN,3000,Warehouse SPOC,Buyer,Plant Controller,48
+NO_PO,3000,Requester,Cost Center Owner,AP Lead,48

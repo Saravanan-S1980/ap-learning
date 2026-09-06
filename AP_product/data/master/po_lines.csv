@@ -1,0 +1,7 @@
+po_number,po_line,material_id,description,quantity,uom,unit_price,currency,tax_code
+4500001000,10,MAT-1001,Steel Plate S355 10mm,5000,KG,1.20,EUR,V1
+4500001001,10,MAT-1002,Ball Bearing 6205-2RS,1000,EA,8.50,EUR,V1
+4500001002,10,MAT-1004,Hydraulic Valve HV-50,50,EA,230.00,EUR,V1
+4500001003,10,MAT-1005,Cast Housing CH-200,200,EA,75.00,EUR,V1
+4500002000,10,MAT-2001,Steel Plate A36 0.5in,20000,LB,0.65,USD,U1
+4500003000,10,MAT-3001,Machined Shaft MS-12,100,EA,1200.00,INR,G1

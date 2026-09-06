@@ -1,0 +1,17 @@
+# Spins up Postgres with the pgvector extension. We'll start using this in the data-layer module.
+# Run with: docker compose up -d
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: ap_suite_db
+    environment:
+      POSTGRES_USER: ap_user
+      POSTGRES_PASSWORD: ap_password
+      POSTGRES_DB: ap_suite
+    ports:
+      - "5432:5432"
+    volumes:
+      - ap_db_data:/var/lib/postgresql/data
+
+volumes:
+  ap_db_data:

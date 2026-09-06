@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Environment and secrets
+.env
+*.key
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Data we don't commit (keep samples, ignore real runs)
+data/incoming/
+data/processed/
+*.log
+
+# Node / frontend
+node_modules/
+dist/
+build/

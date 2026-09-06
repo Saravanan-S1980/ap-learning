@@ -1,0 +1,8 @@
+file,scenario,language,vendor_id,po_number,currency,net,tax,gross,expected_outcome,expected_exception,notes
+INV-2026-1001_clean_po.pdf,Clean PO 3-way match,en,V1001,4500001000,EUR,6000.00,1140.00,7140.00,AUTO_POST,none,Matches PO and full GRN within tolerance
+INV-2026-1002_price_mismatch.pdf,Price mismatch,en,V1002,4500001001,EUR,9200.00,1748.00,10948.00,EXCEPTION,PRICE_MISMATCH,Invoiced 9.20 vs PO 8.50
+INV-2026-1003_pending_grn.pdf,Pending GRN / qty mismatch,en,V1004,4500001002,EUR,11500.00,2185.00,13685.00,EXCEPTION,PENDING_GRN,"Invoiced 50 EA, only 40 received"
+INV-2026-2001_non_po_consulting.pdf,Non-PO services,en,V2004,,USD,12000.00,0.00,12000.00,CODING_QUEUE,NO_PO,Needs GL 610000 + cost center + requester recommendation
+INV-2026-1005_german_rechnung.pdf,"German language, clean PO",de,V1005,4500001003,EUR,15000.00,2850.00,17850.00,AUTO_POST,none,Tests language detection; EU number format
+INV-2026-3001_india_gst.pdf,"India GST, INR, clean PO",en,V3001,4500003000,INR,120000.00,21600.00,141600.00,AUTO_POST,none,Multi-currency; Indian number format
+INV-2026-1001-DUP_duplicate.pdf,Duplicate resend,en,V1001,4500001000,EUR,6000.00,1140.00,7140.00,EXCEPTION,DUPLICATE,Same invoice number as INV-2026-1001

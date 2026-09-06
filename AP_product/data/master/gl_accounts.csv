@@ -1,0 +1,10 @@
+gl_account,description,account_type
+130000,Raw materials inventory,ASSET
+510000,Consumables and MRO expense,EXPENSE
+520000,Freight inward expense,EXPENSE
+610000,Professional and consulting services,EXPENSE
+620000,Calibration and quality services,EXPENSE
+470000,Packaging expense,EXPENSE
+175000,Input VAT receivable (DE),ASSET
+175100,Use tax payable (US),LIABILITY
+175200,Input GST receivable (IN),ASSET

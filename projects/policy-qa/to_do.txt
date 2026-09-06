@@ -1,0 +1,53 @@
+POLICY PAL - PRE-WEEK 1 CHECKLIST
+==================================
+
+PDFs TO GATHER
+--------------
+[ ] You have: New India Insurance policy (done)
+[ ] Get: Star Health policy wording (common retail, table-heavy layout)
+[ ] Get: ICICI Lombard or HDFC Ergo policy wording (corporate-style)
+[ ] Get: Niva Bupa or Care Health policy wording (newer insurer, cleaner format)
+
+NOTE: Download the full policy wording document, not the product brochure or
+welcome letter. Look under "Policy Wordings" or "Downloads" on the insurer's
+website, or log into your policy portal.
+
+
+ACCOUNTS TO CREATE
+------------------
+[ ] Razorpay - START THIS FIRST. KYC takes 2-3 business days.
+    Go to: razorpay.com
+
+[ ] Voyage AI - needed before Week 2.
+    Go to: voyageai.com
+    Action: Sign up and save your API key somewhere safe.
+
+[ ] Firebase - needed before Week 6, can wait.
+    Go to: console.firebase.google.com
+    Action: Create a project. Enable Google sign-in under Authentication.
+
+[ ] Railway - needed before Week 8, can wait.
+    Go to: railway.app
+
+[ ] Vercel - needed before Week 8, can wait.
+    Go to: vercel.com
+
+
+LOCAL ENVIRONMENT
+-----------------
+[ ] Confirm Python 3.11 or newer is installed
+[ ] Confirm Node 20 or newer is installed
+[ ] Confirm your Anthropic API key is set in your environment
+[ ] In a fresh virtualenv, confirm this installs without errors:
+    pip install pdfplumber fastapi uvicorn pydantic
+
+
+NEW INDIA PDF - DO THIS BEFORE WEEK 1
+--------------------------------------
+[ ] Open your New India policy PDF
+[ ] Find the main benefits table (room rent, sub-limits, coverage amounts)
+    Note the page number: ______
+[ ] Find the exclusions section
+    Note the page number: ______
+
+These are your manual verification targets for Week 1 extraction testing.

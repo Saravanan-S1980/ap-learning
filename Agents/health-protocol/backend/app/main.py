@@ -31,6 +31,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
+    # Also allow any device on a local 192.168.x.x network (mobile testing over WiFi)
+    allow_origin_regex=r"http://192\.168\.\d{1,3}\.\d{1,3}(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

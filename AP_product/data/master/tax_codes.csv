@@ -1,0 +1,6 @@
+tax_code,country,description,rate_pct,gl_account
+V1,DE,Input VAT standard,19.0,175000
+V2,DE,Input VAT reduced,7.0,175000
+U1,US,Use tax (self-assessed),0.0,175100
+G1,IN,Input GST standard,18.0,175200
+G2,IN,Input GST reduced,5.0,175200

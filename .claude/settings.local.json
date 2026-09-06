@@ -6,7 +6,8 @@
       "Bash(pip show:*)",
       "Bash(netstat -ano)",
       "Bash(python3:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(xargs grep -l \"streamlit\\\\|st\\\\.sidebar\\\\|st\\\\.session_state\")"
     ]
   }
 }

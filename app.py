@@ -161,6 +161,22 @@ hr { border-color: var(--border) !important; opacity: 1; }
 .stButton > button[kind="primary"]:hover {
     background: #3a78e8;
 }
+
+/* ── Download buttons — green ────────────────────────────────────────────── */
+.stDownloadButton > button {
+    background: #00C48C !important;
+    color: #fff !important;
+    border: none !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    padding: 0.5rem 0.6rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+}
+.stDownloadButton > button:hover {
+    background: #00a87a !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -169,6 +185,7 @@ hr { border-color: var(--border) !important; opacity: 1; }
 # SIDEBAR
 # ══════════════════════════════════════════════════════════════════════════════
 PAGES = [
+    "How to use InvoiceIQ",
     "Dashboard",
     "Invoice Processing",
     "Invoice Register",
@@ -3214,9 +3231,191 @@ def _apa_line_items(amount: float, gl: str, exc_type: str) -> list:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# PAGE — HOW TO USE INVOICEIQ
+# ══════════════════════════════════════════════════════════════════════════════
+def page_how_to_use():
+    """Step-by-step onboarding guide and sample invoice downloads."""
+    st.markdown(
+        "<h1 style='color:#4F8EF7; margin:0 0 0.25rem;'>"
+        "❓ How to use InvoiceIQ</h1>"
+        "<p style='color:#8B8FA8; margin:0 0 1.5rem; font-size:0.95rem;'>"
+        "Follow these 5 steps to get started with the AP automation platform.</p>",
+        unsafe_allow_html=True,
+    )
+
+    # ── Step cards ────────────────────────────────────────────────────────────
+    _HELP_STEPS = [
+        (
+            "Step 1 — Start with the AI Pipeline"
+            " (ExtractIQ + ProcessorIQ + AuditIQ + HelpDeskIQ)",
+            [
+                "Download a sample invoice PDF below",
+                "Click <strong style='color:#E8EAF0;'>AP Pipeline</strong>"
+                " in the left sidebar",
+                "Upload the PDF using the upload zone",
+                "Click <strong style='color:#E8EAF0;'>Run Full AP Pipeline</strong>",
+                "Watch 4 stages run automatically — extraction, 3-way matching,"
+                " duplicate check, AI decision",
+                "Download the Decision Package using the button at the bottom",
+            ],
+        ),
+        (
+            "Step 2 — Try the Invoice Extractor on its own",
+            [
+                "Click <strong style='color:#E8EAF0;'>Invoice Processing</strong>"
+                " in the sidebar",
+                "Upload any invoice PDF",
+                "AI extracts all fields automatically — no templates needed",
+                "See matched PO and GRN reference cards below the extracted data",
+            ],
+        ),
+        (
+            "Step 3 — Browse and manage invoices",
+            [
+                "Click <strong style='color:#E8EAF0;'>Invoice Register</strong>"
+                " in the sidebar",
+                "Red cards = High priority exceptions, Amber = Medium, Blue = Low",
+                "Click any invoice card to see full details on the right",
+                "Edit GL Code and Tax Code directly in the line items table",
+                "Click <strong style='color:#E8EAF0;'>Ask me</strong>"
+                " (top right of detail panel) to chat with the AI assistant"
+                " about any invoice",
+            ],
+        ),
+        (
+            "Step 4 — Ask the AI assistant anything",
+            [
+                "On the Invoice Register page, click any invoice then click"
+                " <strong style='color:#E8EAF0;'>Ask me</strong>",
+                "Type questions like: "
+                "<em style='color:#8B8FA8;'>Why is this invoice on hold?</em>, "
+                "<em style='color:#8B8FA8;'>What GL code should I use?</em>, "
+                "<em style='color:#8B8FA8;'>Can I approve without a PO?</em>",
+                "The assistant uses SOPs and invoice context to answer",
+            ],
+        ),
+        (
+            "Step 5 — Check master data",
+            [
+                "Click <strong style='color:#E8EAF0;'>Master Data</strong>"
+                " in the sidebar",
+                "View vendor master, PO master, GRN records, and GL codes",
+                "This is the reference data the pipeline validates against",
+            ],
+        ),
+    ]
+
+    for _si, (_stitle, _spoints) in enumerate(_HELP_STEPS):
+        _badge = (
+            f"<div style='display:inline-flex; align-items:center; "
+            f"justify-content:center; width:30px; height:30px; border-radius:50%; "
+            f"background:#4F8EF7; color:#fff; font-weight:700; font-size:0.88rem; "
+            f"flex-shrink:0;'>{_si + 1}</div>"
+        )
+        _bullets = "".join(
+            f"<li style='color:#8B8FA8; font-size:0.87rem; margin-bottom:0.4rem; "
+            f"line-height:1.55;'>{_p}</li>"
+            for _p in _spoints
+        )
+        st.markdown(
+            f"<div style='background:#1E2130; border:1px solid #2A2D3E; "
+            f"border-radius:10px; padding:1.1rem 1.4rem; margin-bottom:0.65rem;'>"
+            f"<div style='display:flex; align-items:center; gap:0.75rem; "
+            f"margin-bottom:0.7rem;'>"
+            f"{_badge}"
+            f"<span style='color:#4F8EF7; font-weight:700; font-size:0.95rem;'>"
+            f"{_stitle}</span>"
+            f"</div>"
+            f"<ul style='margin:0; padding-left:1.3rem; list-style:disc;'>"
+            f"{_bullets}</ul>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
+    # ── Sample invoice downloads ───────────────────────────────────────────────
+    _SAMPLE_DIR = os.path.join(_BASE, "AP_product", "data", "sample_invoices")
+    _SAMPLES = [
+        (
+            "invoice_INV-5001.pdf",
+            "⬇ INV-5001 — Wipro\nIT Services\nAuto-approve scenario",
+            "INV-2026-1001_clean_po.pdf",
+        ),
+        (
+            "invoice_INV-5002.pdf",
+            "⬇ INV-5002 — Mahindra\nLogistics\nPartial GRN scenario",
+            "INV-2026-1003_pending_grn.pdf",
+        ),
+        (
+            "invoice_INV-5003.pdf",
+            "⬇ INV-5003 — TCS\n(Try this first!)\nEscalate scenario",
+            "INV-2026-1002_price_mismatch.pdf",
+        ),
+        (
+            "invoice_INV-5004.pdf",
+            "⬇ INV-5004 — Reliance\nUtilities\nPO variance scenario",
+            "INV-2026-1001-DUP_duplicate.pdf",
+        ),
+        (
+            "invoice_INV-5005.pdf",
+            "⬇ INV-5005 — Infosys\nBPO Services\nReturn to vendor",
+            "INV-2026-2001_non_po_consulting.pdf",
+        ),
+    ]
+
+    st.markdown(
+        "<div style='background:#1E2130; border:1px solid #2A2D3E; "
+        "border-radius:10px; padding:1.25rem 1.5rem; margin-top:0.4rem;'>"
+        "<div style='color:#4F8EF7; font-size:0.72rem; font-weight:700; "
+        "letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;'>"
+        "Sample Invoice Files</div>"
+        "<p style='color:#8B8FA8; font-size:0.85rem; margin:0 0 0.75rem;'>"
+        "Download any of these sample invoices and upload them to test the"
+        " pipeline.</p>"
+        "<div style='background:rgba(0,196,140,0.08); border-left:3px solid #00C48C; "
+        "border-radius:6px; padding:0.6rem 0.9rem; margin-bottom:1rem; "
+        "font-size:0.84rem;'>"
+        "<span style='color:#00C48C;'><strong>Tip:</strong></span>"
+        "<span style='color:#8B8FA8;'> Start with INV-5003 (Tata Consultancy) — "
+        "it produces the most interesting pipeline result with three simultaneous"
+        " exceptions.</span></div>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    _dl_cols = st.columns(5)
+    for _dc, (_dl_name, _dl_label, _actual_file) in zip(_dl_cols, _SAMPLES):
+        _actual_path = os.path.join(_SAMPLE_DIR, _actual_file)
+        with _dc:
+            if os.path.exists(_actual_path):
+                with open(_actual_path, "rb") as _fh:
+                    st.download_button(
+                        label=_dl_label,
+                        data=_fh.read(),
+                        file_name=_dl_name,
+                        mime="application/pdf",
+                        key=f"help_dl_{_dl_name}",
+                        use_container_width=True,
+                    )
+            else:
+                st.button(
+                    _dl_label + "\n(file not found)",
+                    disabled=True,
+                    key=f"help_dl_na_{_dl_name}",
+                    use_container_width=True,
+                )
+
+    st.markdown(
+        "<hr style='border-color:#2A2D3E; margin:1.75rem 0 0.5rem;'>",
+        unsafe_allow_html=True,
+    )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ROUTER
 # ══════════════════════════════════════════════════════════════════════════════
-if page == "Dashboard":
+if page == "How to use InvoiceIQ":
+    page_how_to_use()
+elif page == "Dashboard":
     page_dashboard()
 elif page == "Invoice Processing":
     page_invoice_processing()

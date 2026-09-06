@@ -1,0 +1,4 @@
+company_code,legal_entity,country,currency,plant_code,plant_name
+1000,Nordwerk GmbH,DE,EUR,1010,Stuttgart Works
+2000,Nordwerk Inc,US,USD,2010,Cleveland Plant
+3000,Nordwerk India Pvt Ltd,IN,INR,3010,Pune Plant

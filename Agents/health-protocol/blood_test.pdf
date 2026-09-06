@@ -1,0 +1,46 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 780 >>
+stream
+BT /F1 10 Tf 40 750 Td
+(BLOOD TEST REPORT) Tj 0 -14 Td
+(Lab: SRL Diagnostics) Tj 0 -14 Td
+(Date: 12-Apr-2026) Tj 0 -14 Td
+() Tj 0 -14 Td
+(TEST                     RESULT    UNIT      REFERENCE RANGE   FLAG) Tj 0 -14 Td
+(--------------------------------------------------------------------) Tj 0 -14 Td
+(Hemoglobin               11.8      g/dL      13.0 - 17.0       L) Tj 0 -14 Td
+(Triglycerides            218       mg/dL     < 150             H) Tj 0 -14 Td
+(HDL Cholesterol          36        mg/dL     40 - 60           L) Tj 0 -14 Td
+(Vitamin D \(25-OH\)        14.2      ng/mL     30 - 100          L) Tj 0 -14 Td
+(TSH                      0.32      mIU/L     0.40 - 4.00       L) Tj 0 -14 Td
+(Fasting Glucose          112       mg/dL     70 - 100          H) Tj 0 -14 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000244 00000 n 
+0000001075 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1143
+%%EOF

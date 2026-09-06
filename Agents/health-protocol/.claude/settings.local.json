@@ -7,7 +7,24 @@
       "Bash(PYTHONPATH=backend .venv/Scripts/uvicorn app.main:app --host 0.0.0.0 --port 8000)",
       "Bash(echo \"Server PID: $!\")",
       "Bash(curl:*)",
-      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(m.upper\\(\\), p\\) for p,ops in d['paths'].items\\(\\) for m in ops]\")"
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(m.upper\\(\\), p\\) for p,ops in d['paths'].items\\(\\) for m in ops]\")",
+      "Bash(PYTHONPATH=backend .venv/Scripts/python:*)",
+      "Bash(PYTHONPATH=backend python -m pytest backend/tests/test_pdf_extractor.py -v)",
+      "Bash(python -m pytest backend/tests/test_pdf_extractor.py -v)",
+      "Bash(pip install:*)",
+      "Bash(python -c ':*)",
+      "Bash(PYTHONPATH=backend python -m uvicorn app.main:app --host 127.0.0.1 --port 8000)",
+      "Bash(PYTHONPATH=backend python -)",
+      "Bash(python -m json.tool)",
+      "Bash(python ../test_analysis_chain.py)",
+      "Bash(python test_analysis_chain.py)",
+      "Bash(python test_full_chain.py)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(node -e \"const l = require\\('./node_modules/lucide-react/dist/cjs/lucide-react.js'\\); ['FlaskConical','Activity','Leaf','Download','Check','Clock','Info'].forEach\\(n => console.log\\(n, n in l ? 'OK' : 'MISSING'\\)\\)\")"
     ]
   }
 }

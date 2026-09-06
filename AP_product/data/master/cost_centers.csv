@@ -1,0 +1,9 @@
+cost_center,description,company_code,plant_code
+CC-PROD-10,Production Stuttgart,1000,1010
+CC-MAINT-10,Maintenance Stuttgart,1000,1010
+CC-LOG-10,Logistics Stuttgart,1000,1010
+CC-QA-10,Quality Stuttgart,1000,1010
+CC-PROD-20,Production Cleveland,2000,2010
+CC-ADMIN-20,Admin Cleveland,2000,2010
+CC-PROD-30,Production Pune,3000,3010
+CC-QA-30,Quality Pune,3000,3010
